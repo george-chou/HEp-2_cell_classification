@@ -111,11 +111,11 @@ The steps to finetune the pre-trained AlexNet on Pytorch are as follow:
 
 Data augmentation is like an image pre-processing in the training phase. When our dataset is not enough for training, and we cannot find more images to supplement our dataset, data augmentation is a good way to expand our dataset. This process is like the practice questions for students are not enough, change the existing questions and continue to train the students. There are many data augmentation methods, such as:
 
-1)  Crop, rotation, flip, hue, saturation, exposure, aspect; 
-2)  Mix-up; 
-3)	Cut Mix; 
-4)	Mosaic; 
-5)  Blur;
+1) Crop, rotation, flip, hue, saturation, exposure, aspect;
+2) MixUp;
+3)	CutMix;
+4)	Mosaic;
+5) Blur;
 
 <div align=center>
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/f5.png"/><br>
