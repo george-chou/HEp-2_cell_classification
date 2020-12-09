@@ -214,7 +214,7 @@ Then we test the accuracy on the test loader and get 92% accuracy, which is show
 
 <div align=center>
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/f14.png"/><br>
-<b>Figure 14: Training and validation accuracy</b>
+<b>Figure 14: Accuracy of test</b>
 </div>
 
 ## Discussion and Conclusion
