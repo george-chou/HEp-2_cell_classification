@@ -23,7 +23,7 @@ The training set contains 8,701 images, the validation set includes 2,175 cell i
 
 <div align=center>
 <b>Table 1: The usage of three sorts of dataset</b><br>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/t1.png"/>
+<img width="605" src="https://george-chou.github.io/covers/HEp-2/t1.PNG"/>
 </div>
 
 ### Background
@@ -48,7 +48,7 @@ Python is a cross-platform programming language, as well as a high-level scripti
 Python’s package management, which is a collection of modules, can provide us with functions written by others. For example, the API of the CSV module implements the reading and writing of form data in CSV format; its mean syntax is as follow:
 
 <div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f1.png"/><br>
+<img width="605" src="https://george-chou.github.io/covers/HEp-2/f1.PNG"/><br>
 <b>Figure 1: Syntax of csv module in Python</b>
 </div>
 
@@ -233,7 +233,7 @@ In conclusion, we finish the dataset establishing process, model establishing pr
 
 <div align=center>
 <b>Table 2: Experiment parameters</b><br>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/t2.png"/>
+<img width="605" src="https://george-chou.github.io/covers/HEp-2/t2.PNG"/>
 </div>
 
 ### Future work
