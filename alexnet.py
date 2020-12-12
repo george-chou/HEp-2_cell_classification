@@ -49,7 +49,7 @@ def eval_model_validation(model, validationLoader, device, val_acc_list):
     print('Accuracy of validationloader: %d %%' % (100 * correct / total))
     val_acc_list.append(100 * correct / total)
 
-def eval_model_test(model, device, testLoader):
+def eval_model_test(model, testLoader, device):
     correct = 0
     total = 0
     with torch.no_grad():
@@ -156,7 +156,7 @@ def main():
         scheduler.step(loss.item())
     print('Finished Training')
 
-    eval_model_test(model, device, testloader)
+    eval_model_test(model, testloader, device)
     
     x_acc=[]
     for i in range(len(tra_acc_list)):
