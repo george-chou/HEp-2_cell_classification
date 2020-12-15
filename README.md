@@ -21,10 +21,7 @@ Our task consists of five steps:
  
 The training set contains 8,701 images, the validation set includes 2,175 cell images, and the test set contains 2,720 cell images. Besides, there is a label file containing ID and category of the overall 13,596 cell images. These are all our experiment materials from the international competition on cell image classification hosted by the International Conference on Pattern Recognition in 2014 (ICPR2014).
 
-<div align=center>
-<b>Table 1: The usage of three sorts of dataset</b><br>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/t1.PNG"/>
-</div>
+<div align=center><b>Table 1: The usage of three sorts of dataset</b><br></div>
 
 | Dataset type | Usage |
 | --- | --- |
@@ -172,7 +169,6 @@ model.classifier = torch.nn.Sequential(nn.Dropout(),
                                        nn.Linear(4096, 1000),
                                        nn.ReLU(inplace=True),
                                        nn.Linear(1000,6))
-model
 ```
 
 First we use the “torch.hub.load” function to load the pretrained AlexNet. Then due to the classification target of this task being 6, we must change the fully connected layers. We must use the “require_grad=False” function to set the returned grad to none. This is because the pretrained model has their own grad which we do not know. In addition, the change of model architecture will also lead to the change of grad. Therefore, in order to change some parts of the pretrained net, we want to freeze some parts of the model and cannot return the grad again. So, we have to set the returned grad to “False”. Then we rewrite the classifier layer of the AlexNet and add one dropout layer to avoid the overfitting, one activation function (“Relu”) to increase non-linear and one linear layer to change the final output channels to finish the classify task. We can use the “model.eval()” to evaluate the whole model, which is shown as follow:
@@ -241,9 +237,8 @@ Then we develop the training and evaluation function of this task, which is show
 ```
 epoch_num=40
 iteration=10
-#train process
-for epoch in range(epoch_num):  # loop over the dataset multiple times
 
+for epoch in range(epoch_num):  # loop over the dataset multiple times
     epoch_str = f' Epoch {epoch + 1}/{epoch_num} '
     print(f'{epoch_str:-^40s}')
     print(f'Learning rate: {optimizer.param_groups[0]["lr"]}')
@@ -271,13 +266,10 @@ for epoch in range(epoch_num):  # loop over the dataset multiple times
     scheduler.step(loss.item())
 
 print('Finished Training')
-```
 
-```
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
-
-#evaluation
 
 def eval_model_train(model, trainLoader, tra_acc_list):
     correct = 0
@@ -408,7 +400,7 @@ In conclusion, we finish the dataset establishing process, model establishing pr
 <div align=center><b>Table 2: Experiment parameters</b><br></div>
 
 | Parameter | epoch | iteration | batch_size |
-| --- | --- | --- | --- |
+| :---: | :---: | :---: | :---: |
 | Value | 40 | 10 | 4 |
 
 ### Future work
