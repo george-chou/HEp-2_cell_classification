@@ -296,7 +296,8 @@ def eval_model_validation(model, validationLoader, val_acc_list):
             correct += (predicted == labels).sum().item()
     print('Accuracy of validationloader: %d %%' % (100 * correct / total))
     val_acc_list.append(100 * correct / total)
-
+```
+```
 cuda:0
 ```
 
@@ -379,7 +380,8 @@ def eval_model_test(model, testLoader):
     print('Accuracy of test: %d %%' % (100 * correct / total))
 
 eval_model_test(model, testloader)
-
+```
+```
 Accuracy of test: 92 %
 ```
 
