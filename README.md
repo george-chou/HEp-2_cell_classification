@@ -26,6 +26,12 @@ The training set contains 8,701 images, the validation set includes 2,175 cell i
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/t1.PNG"/>
 </div>
 
+| Dataset type | Usage |
+| --- | --- |
+| Training set | They are data samples used for model fitting; |
+| Validation set | It is a set of samples set aside separately during model training used to adjust the hyperparameters of the model and to conduct a preliminary evaluation of the model's capabilities; |
+| Test set | It can evaluate the generalization ability of the final model but not as a basis for algorithm-related selection such as parameter tuning and feature selection. |
+
 ### Background
 
 The human epithelial 2 (HEp-2) cells are epithelial cells of carcinoma of the larynx human. They are used for laboratory diagnostics for the detection of autoimmune antibodies and antinuclear antibodies. This specific type of cells represents the substrate of choice for the search for autoimmune antibodies with the indirect immunofluorescence technique due to their tumour nature.
@@ -47,20 +53,26 @@ Python is a cross-platform programming language, as well as a high-level scripti
 
 Python’s package management, which is a collection of modules, can provide us with functions written by others. For example, the API of the CSV module implements the reading and writing of form data in CSV format; its mean syntax is as follow:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f1.PNG"/><br>
-<b>Figure 1: Syntax of csv module in Python</b>
-</div>
+```
+import csv 
+ with open('gt_training.csv',"rt", encoding="utf-8") as csvfile: 
+    reader = csv.reader(csvfile)
+    rows = [row for row in reader]
+    for row in rows:
+        ...
+```
 
 ### Deep Learning
 
 Deep learning is a sort of AI function that mimics the way the human brain worked when processing data used to detect objects, recognise speech, translate language and make decisions. Deep learning AI can learn unsupervised from unstructured and unlabelled data. The process of deep learning is equivalent to the operation of regression. A neural network is a model that contains a large number of undetermined parameters. The learning process is to fill in these uncertain parameters. This process needs to refer to the backpropagation algorithm.
  
-The backpropagation algorithm works by calculating the gradient of the loss function for each weight through a chain rule, one slope at a time, iterating backwards from the last level to avoid redundant calculation of intermediate terms in the chain rule. The steps to perform a deep learning model is as follow: 
+The backpropagation algorithm works by calculating the gradient of the loss function for each weight through a chain rule, one slope at a time, iterating backwards from the last level to avoid redundant calculation of intermediate terms in the chain rule. The steps to perform a deep learning model is as follow:
  
-1)	Design layer structures; 
-2)	Set up deep learning layers; 
-3)	Define loss function and optimiser; 4) Train the model with training data; 5) Predict the test data.
+1)	Design layer structures;
+2)	Set up deep learning layers;
+3)	Define loss function and optimiser;
+4)  Train the model with training data;
+5)  Predict the test data.
 
 ### CNN
 
@@ -73,10 +85,10 @@ The CNN stands for the convolutional neural network, which is a kind of feedforw
 
 The training steps of CNN model are as below: 
  
-1)	Input the training data into the model; 
-2)	Obtain the result from the current model; 
-3)	Calculate the loss with loss functions; 
-4)	Gain gradients by backpropagating the loss; 
+1)	Input the training data into the model;
+2)	Obtain the result from the current model;
+3)	Calculate the loss with loss functions;
+4)	Gain gradients by backpropagating the loss;
 5)	Update model weights with gradient vectors and pre-defined learning rate.
 
 ### Pytorch
@@ -144,17 +156,59 @@ Then we use the “DataLoader” function to make the dataset to several load gr
 
 Then we develop the AlexNet model and the whole code is shown below:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f6.png"/><br>
-<b>Figure 6: Code of the AlexNet</b>
-</div>
+```
+model = torch.hub.load('pytorch/vision:v0.6.0', 'alexnet', pretrained=True)
+
+for parma in model.parameters():
+    parma.requires_grad = False
+          
+model.classifier = torch.nn.Sequential(nn.Dropout(),
+                                       nn.Linear(256 * 6 * 6, 4096),
+                                       nn.ReLU(inplace=True),
+                                       nn.Dropout(),
+                                       nn.Linear(4096, 4096),
+                                       nn.ReLU(inplace=True),
+                                       nn.Dropout(0.5),
+                                       nn.Linear(4096, 1000),
+                                       nn.ReLU(inplace=True),
+                                       nn.Linear(1000,6))
+model
+```
 
 First we use the “torch.hub.load” function to load the pretrained AlexNet. Then due to the classification target of this task being 6, we must change the fully connected layers. We must use the “require_grad=False” function to set the returned grad to none. This is because the pretrained model has their own grad which we do not know. In addition, the change of model architecture will also lead to the change of grad. Therefore, in order to change some parts of the pretrained net, we want to freeze some parts of the model and cannot return the grad again. So, we have to set the returned grad to “False”. Then we rewrite the classifier layer of the AlexNet and add one dropout layer to avoid the overfitting, one activation function (“Relu”) to increase non-linear and one linear layer to change the final output channels to finish the classify task. We can use the “model.eval()” to evaluate the whole model, which is shown as follow:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f7.png"/><br>
-<b>Figure 7: The model structure of the AlexNet</b>
-</div>
+```
+AlexNet(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (4): ReLU(inplace=True)
+    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU(inplace=True)
+    (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): ReLU(inplace=True)
+    (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace=True)
+    (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(6, 6))
+  (classifier): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=9216, out_features=4096, bias=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout(p=0.5, inplace=False)
+    (4): Linear(in_features=4096, out_features=4096, bias=True)
+    (5): ReLU(inplace=True)
+    (6): Dropout(p=0.5, inplace=False)
+    (7): Linear(in_features=4096, out_features=1000, bias=True)
+    (8): ReLU(inplace=True)
+    (9): Linear(in_features=1000, out_features=6, bias=True)
+  )
+)
+```
 
 We can see that the final output channels are changed from 1,000 to 6.
 
@@ -162,24 +216,97 @@ We can see that the final output channels are changed from 1,000 to 6.
 
 Then we set some basic functions of the training process such as loss function, optimizer function, learning rate schedule and GPU CUDA setting. The whole code is shown below:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f8.png"/><br>
-<b>Figure 8: Code of some functions in training process</b>
-</div>
+```
+import torch.optim as optim
+lr=0.001
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.classifier.parameters(), lr, momentum=0.9)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=0.1, patience=5, verbose=True,
+        threshold=lr, threshold_mode='rel', cooldown=0, min_lr=0, eps=1e-08)
+
+torch.cuda.empty_cache()
+model=model.cuda()
+criterion = criterion.cuda()
+for state in optimizer.state.values():
+    for k, v in state.items():
+        if isinstance(v, torch.Tensor):
+            state[k] = v.cuda()
+```
 
 We use the cross-entropy loss in this task. This is because this cross-entropy loss has been approved to perform well in image classification tasks. Then we use the “SGD” optimizer to optimize the model. It is important that we only change the parameters of the classifier layer, this is because the pretrained model already trained well for the initial convolutional layer. Then we use the “ReduceLROnPlateau” function to decrease the learning rate to one tenth if the loss hasn't changed too much for 5 epochs. This function requires us to input the loss to finish. Finally, we put model, data and criterion to GPU to increase the training speed.
 
 Then we develop the training and evaluation function of this task, which is shown as follow:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f9.png"/><br>
-<b>Figure 9: Code of training function</b>
-</div>
+```
+epoch_num=40
+iteration=10
+#train process
+for epoch in range(epoch_num):  # loop over the dataset multiple times
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f10.png"/><br>
-<b>Figure 10: Code of evaluation function</b>
-</div>
+    epoch_str = f' Epoch {epoch + 1}/{epoch_num} '
+    print(f'{epoch_str:-^40s}')
+    print(f'Learning rate: {optimizer.param_groups[0]["lr"]}')
+    running_loss = 0.0
+    for i, data in enumerate(trainloader, 0):
+        # get the inputs
+        inputs, labels = data[0].cuda(),data[1].cuda()
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward + backward + optimize
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        # print statistics
+        running_loss += loss.item()
+        if i % iteration == iteration - 1:    # print every 2000 mini-batches
+            print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / iteration))
+            loss_list.append(running_loss / iteration)
+        running_loss = 0.0
+    eval_model_train(model, trainloader, tra_acc_list)            
+    eval_model_validation(model, validationloader, val_acc_list)
+    scheduler.step(loss.item())
+
+print('Finished Training')
+```
+
+```
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
+
+#evaluation
+
+def eval_model_train(model, trainLoader, tra_acc_list):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in trainLoader:
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print('Accuracy of trainloader: %d %%' % (100 * correct / total))
+    tra_acc_list.append(100 * correct / total) 
+    
+def eval_model_validation(model, validationLoader, val_acc_list):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in validationLoader:
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print('Accuracy of validationloader: %d %%' % (100 * correct / total))
+    val_acc_list.append(100 * correct / total)
+
+cuda:0
+```
 
 For the training process, we first get the input data and move them to GPU. Then we use this model to train the input image and receive output results. After this process, we use loss function to calculate the loss by predicting output and ground truth label and move this loss backwards for the optimizer function. After several iterations, we collect the average loss in order to draw the loss curve. In addition, we run evaluation functions to evaluate the training results by accuracy. In the final of one epoch training, we use the schedule function to change the learning rate for the next epoch.
 
@@ -187,10 +314,44 @@ For the evaluation process, we input the image and use the model to finish the c
 
 Then we use the “matplot” function to plot the loss curve and accuracy curve. The code is shown below:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f11.png"/><br>
-<b>Figure 11: Code of plot image</b>
-</div>
+```
+import matplotlib.pyplot as plt
+import numpy as np
+
+def show_point(max_id, list):
+    show_max='['+str(max_id+1)+' '+str(list[max_id])+']'
+    plt.annotate(show_max, xytext=(max_id+1, list[max_id]), xy=(max_id+1, list[max_id]))
+
+plt.figure(1)
+plt.axis([0, 260, 0, 0.01])
+plt.plot(iter_list, loss_list, label="loss", color="red", linestyle="-", linewidth=1)
+plt.xlabel("validation iteration")
+plt.ylabel("loss")
+plt.title("loss curve")
+plt.legend()
+plt.show()
+
+x_acc=[]
+for i in range(len(tra_acc_list)):
+    x_acc.append(i+1)
+
+x=np.array(x_acc)
+y1=np.array(tra_acc_list)
+y2=np.array(val_acc_list)
+max1=np.argmax(y1)
+max2=np.argmax(y2)
+plt.title('Accuracy of training and validation')
+plt.xlabel('Epoch')
+plt.ylabel('Acc(%)')
+plt.plot(x, y1, label="Training")
+plt.plot(x, y2, label="Validation")
+plt.plot(1+max1, y1[max1], 'r-o')
+plt.plot(1+max2, y2[max2], 'r-o')
+show_point(max1, y1)
+show_point(max2, y2)
+plt.legend()
+plt.show()
+```
 
 Then we can receive the loss curve and show it in the following picture:
 
@@ -212,10 +373,23 @@ We can find that the training and validation accuracy are increasing at beginnin
 
 Then we test the accuracy on the test loader and get 92% accuracy, which is shown below:
 
-<div align=center>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/f14.png"/><br>
-<b>Figure 14: Accuracy of test</b>
-</div>
+```
+def eval_model_test(model, testLoader):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in testLoader:
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print('Accuracy of test: %d %%' % (100 * correct / total))
+
+eval_model_test(model, testloader)
+
+Accuracy of test: 92 %
+```
 
 ## Discussion and Conclusion
 
@@ -231,10 +405,11 @@ Learning rate: according to our experiment, the large learning will study fast i
 
 In conclusion, we finish the dataset establishing process, model establishing process and model training and evaluating process. We finally received a test accuracy of 92% using the following parameters:
 
-<div align=center>
-<b>Table 2: Experiment parameters</b><br>
-<img width="605" src="https://george-chou.github.io/covers/HEp-2/t2.PNG"/>
-</div>
+<div align=center><b>Table 2: Experiment parameters</b><br></div>
+
+| Parameter | epoch | iteration | batch_size |
+| --- | --- | --- | --- |
+| Value | 40 | 10 | 4 |
 
 ### Future work
 
