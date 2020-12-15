@@ -35,7 +35,7 @@ The human epithelial 2 (HEp-2) cells are epithelial cells of carcinoma of the la
 
 <div align=center>
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/f0.png"/><br>
-<b>Figure 0: HEp-2 example cell images of ICPR2014 dataset</b>
+<b>Figure 1: HEp-2 example cell images of ICPR2014 dataset</b>
 </div>
 
 Efficient image classification of HEp-2 cells can facilitate the diagnosis of many autoimmune diseases. That is why we make a classification for HEp-2 cells. However, image classification is a heavy workload and requires high accuracy. Manual search is unrealistic; traditional image segmentation algorithms are not enough to meet the demand. Therefore, the use of a deep CNN-based image segmentation algorithm is more appropriate.
@@ -349,7 +349,7 @@ Then we can receive the loss curve and show it in the following picture:
 
 <div align=center>
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/f12.png"/><br>
-<b>Figure 12: Loss curve</b>
+<b>Figure 6: Loss curve</b>
 </div>
 
 Although the loss is fluctuating during the whole process, the main trend of this curve is in decreasing.
@@ -358,7 +358,7 @@ Then we plot the accuracy curve of training and validation data loader, which is
 
 <div align=center>
 <img width="605" src="https://george-chou.github.io/covers/HEp-2/f13.png"/><br>
-<b>Figure 13: Training and validation accuracy</b>
+<b>Figure 7: Training and validation accuracy</b>
 </div>
 
 We can find that the training and validation accuracy are increasing at beginning and levelling off after about 20 epochs. In addition, the accuracy curve of training and validation dataset are separated at about 20 epochs, this is because of the influence of overfitting.
